@@ -57,6 +57,8 @@ export interface CouncilMember {
   email: string;
   role: 'chu_tich' | 'phan_bien_1' | 'phan_bien_2' | 'thu_ky' | 'uy_vien';
   hasConflict?: boolean;
+  phone: string;
+  affiliation: string;
 }
 
 export interface Council {
