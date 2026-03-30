@@ -11,7 +11,7 @@ const CouncilCreationPage: React.FC = () => {
   const [members, setMembers] = useState<CouncilMember[]>([{ name: 'GS.TS. Hoàng Văn E', role: 'chu_tich', email: 'hve@university.edu.vn', phone: '', affiliation: 'Đại học Quốc gia' }]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   
-  const [newMember, setNewMember] = useState<CouncilMember>({ name: '', role: 'uy_vien', email: '', phone: '', affiliation: '' });
+  const [newMember, setNewMember] = useState<CouncilMember>({ name: '', role: 'uy_vien', email: '', phone: '', affiliation: '', hocHamHocVi: '' } as any);
 
   useEffect(() => {
     getCouncils().then(setCouncils);
@@ -22,7 +22,7 @@ const CouncilCreationPage: React.FC = () => {
     e.preventDefault();
     await councilService.addMember(null, newMember, 'Research Staff');
     setMembers([...members, newMember]);
-    setNewMember({ name: '', role: 'uy_vien', email: '', phone: '', affiliation: '' });
+    setNewMember({ name: '', role: 'uy_vien', email: '', phone: '', affiliation: '', hocHamHocVi: '' } as any);
     setIsModalOpen(false);
     showToast('Đã thêm thành viên: ' + newMember.name);
   };
@@ -118,7 +118,7 @@ const CouncilCreationPage: React.FC = () => {
               <table className="w-full">
                 <thead className="bg-gray-50 border-b border-gray-100">
                   <tr>
-                    {['Họ và Tên', 'Vai trò', 'Email', 'Xóa'].map(h => (
+                    {['Họ và Tên', 'Học hàm / Học vị', 'Vai trò', 'Email', 'Xóa'].map(h => (
                       <th key={h} className="px-4 py-3 text-left text-[10px] font-bold text-gray-400 uppercase">{h}</th>
                     ))}
                   </tr>
@@ -127,15 +127,19 @@ const CouncilCreationPage: React.FC = () => {
                   {members.map((m, idx) => (
                     <tr key={idx}>
                       <td className="px-4 py-4"><input type="text" value={m.name} readOnly className="w-full border-gray-200 bg-gray-50 rounded-xl text-sm" /></td>
+                      <td className="px-4 py-4"><input type="text" value={(m as any).hocHamHocVi || ''} readOnly className="w-full border-gray-200 bg-gray-50 rounded-xl text-sm" /></td>
                       <td className="px-4 py-4"><input type="text" value={m.role === 'chu_tich' ? 'Chủ tịch' : m.role === 'phan_bien_1' ? 'Phản biện 1' : m.role === 'phan_bien_2' ? 'Phản biện 2' : m.role === 'thu_ky' ? 'Thư ký' : 'Ủy viên'} readOnly className="w-full border-gray-200 bg-gray-50 rounded-xl text-sm" /></td>
                       <td className="px-4 py-4"><input type="email" value={m.email || ''} readOnly className="w-full border-gray-200 bg-gray-50 rounded-xl text-sm" /></td>
                       <td className="px-4 py-4 text-center"><button onClick={() => setMembers(members.filter((_, i) => i !== idx))} className="text-gray-400 hover:text-red-500 font-bold text-[10px] uppercase">Xóa</button></td>
                     </tr>
                   ))}
                   <tr>
-                    <td colSpan={4} className="px-4 py-4">
+                    <td colSpan={5} className="px-4 py-4">
                       <button onClick={() => setIsModalOpen(true)} className="w-full py-3 border-2 border-dashed border-gray-200 rounded-xl text-xs font-bold text-gray-400 hover:text-[#1E40AF] hover:border-blue-200 hover:bg-blue-50 transition-colors">
                         + Thêm thành viên mới
+                      </button>
+                      <button onClick={() => alert('Xuất file thành công')} className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded mt-2 text-xs font-bold w-full">
+                        Xuất file
                       </button>
                     </td>
                   </tr>
@@ -211,7 +215,7 @@ const CouncilCreationPage: React.FC = () => {
               <div><label className="block text-xs font-bold text-gray-500 uppercase mb-2">Họ và Tên</label><input required type="text" value={newMember.name} onChange={e => setNewMember({...newMember, name: e.target.value})} className="w-full border-gray-200 rounded-xl text-sm focus:ring-[#1E40AF]" placeholder="Nhập tên thành viên..." /></div>
               <div><label className="block text-xs font-bold text-gray-500 uppercase mb-2">Vai trò</label><select value={newMember.role} onChange={e => setNewMember({...newMember, role: e.target.value as any})} className="w-full border-gray-200 rounded-xl text-sm focus:ring-[#1E40AF]"><option value="chu_tich">Chủ tịch</option><option value="phan_bien_1">Phản biện 1</option><option value="phan_bien_2">Phản biện 2</option><option value="thu_ky">Thư ký</option><option value="uy_vien">Ủy viên</option></select></div>
               <div><label className="block text-xs font-bold text-gray-500 uppercase mb-2">Email</label><input required type="email" value={newMember.email} onChange={e => setNewMember({...newMember, email: e.target.value})} className="w-full border-gray-200 rounded-xl text-sm focus:ring-[#1E40AF]" placeholder="email@domain.com" /></div>
-              <div><label className="block text-xs font-bold text-gray-500 uppercase mb-2">Đơn vị công tác</label><input required type="text" value={newMember.affiliation || ''} onChange={e => setNewMember({...newMember, affiliation: e.target.value})} className="w-full border-gray-200 rounded-xl text-sm focus:ring-[#1E40AF]" placeholder="Trường / Viện nghiên cứu..." /></div>
+              <div><label className="block text-xs font-bold text-gray-500 uppercase mb-2">Học hàm / Học vị</label><select value={(newMember as any).hocHamHocVi || ''} onChange={e => setNewMember({...newMember, hocHamHocVi: e.target.value} as any)} className="w-full border-gray-200 rounded-xl text-sm focus:ring-[#1E40AF]"><option value="">-- Chọn --</option><option value="GS">GS</option><option value="PGS">PGS</option><option value="TS">TS</option><option value="ThS">ThS</option><option value="Khác">Khác</option></select></div>
               <div className="mt-6 flex justify-end gap-3"><button type="button" onClick={() => setIsModalOpen(false)} className="px-6 py-2.5 text-sm font-bold border rounded-xl text-gray-600 hover:bg-gray-50">Hủy</button><button type="submit" className="px-6 py-2.5 text-sm font-bold bg-[#1E40AF] text-white rounded-xl shadow-md hover:bg-blue-800">Lưu thành viên</button></div>
             </form>
           </div>

@@ -20,6 +20,7 @@ import ContractManagementPage from '../pages/research_staff/ContractManagementPa
 import CouncilCreationPage from '../pages/research_staff/CouncilCreationPage';
 import TemplateManagementPage from '../pages/research_staff/TemplateManagementPage';
 import SettlementTrackingPage from '../pages/research_staff/SettlementTrackingPage';
+import SettlementDetailPage from '../pages/research_staff/SettlementDetailPage';
 import ExtensionManagementPage from '../pages/research_staff/ExtensionManagementPage';
 
 // Project Owner Pages
@@ -85,6 +86,7 @@ const AppRouter: React.FC = () => (
         <Route path="council-creation" element={<CouncilCreationPage />} />
         <Route path="template-management" element={<TemplateManagementPage />} />
         <Route path="settlement-tracking" element={<SettlementTrackingPage />} />
+        <Route path="settlement/:id" element={<SettlementDetailPage />} />
         <Route path="extension-management" element={<ExtensionManagementPage />} />
       </Route>
 
